@@ -1,0 +1,299 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Will you go out with me?</title>
+    <style>
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        body {
+            background: linear-gradient(135deg, #ffe5ec, #ffc2d1);
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+            overflow-x: hidden;
+        }
+
+        .card {
+            background: white;
+            padding: 30px;
+            border-radius: 20px;
+            box-shadow: 0 10px 30px rgba(251, 111, 146, 0.2);
+            text-align: center;
+            max-width: 400px;
+            width: 100%;
+            min-height: 400px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            position: relative;
+            transition: all 0.4s ease;
+        }
+
+        .page {
+            display: none;
+            width: 100%;
+            animation: fadeIn 0.5s ease forwards;
+        }
+
+        .page.active {
+            display: block;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        h2 {
+            color: #ff477e;
+            margin-bottom: 20px;
+            font-size: 24px;
+        }
+
+        .gif-placeholder {
+            font-size: 50px;
+            margin-bottom: 20px;
+        }
+
+        .btn-container {
+            display: flex;
+            gap: 15px;
+            justify-content: center;
+            margin-top: 20px;
+            width: 100%;
+            position: relative;
+            height: 50px;
+        }
+
+        button {
+            padding: 12px 25px;
+            border: none;
+            border-radius: 25px;
+            font-size: 16px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: transform 0.2s, background-color 0.2s;
+        }
+
+        .btn-yes {
+            background-color: #ff477e;
+            color: white;
+        }
+
+        .btn-yes:hover {
+            background-color: #ff7096;
+            transform: scale(1.05);
+        }
+
+        .btn-no {
+            background-color: #e0e0e0;
+            color: #555;
+            position: absolute;
+        }
+
+        .btn-next {
+            background-color: #ff477e;
+            color: white;
+            width: 80%;
+            margin-top: 20px;
+        }
+
+        input[type="date"], input[type="time"] {
+            width: 80%;
+            padding: 12px;
+            margin: 10px 0;
+            border: 2px solid #ffccd5;
+            border-radius: 10px;
+            outline: none;
+            font-size: 16px;
+            color: #333;
+            text-align: center;
+        }
+
+        input:focus {
+            border-color: #ff477e;
+        }
+
+        .options-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 10px;
+            width: 100%;
+            margin-top: 15px;
+        }
+
+        .option-card {
+            border: 2px solid #ffccd5;
+            padding: 15px;
+            border-radius: 12px;
+            cursor: pointer;
+            transition: all 0.2s;
+            font-weight: 600;
+            color: #555;
+        }
+
+        .option-card:hover {
+            border-color: #ff477e;
+            background-color: #fff0f3;
+        }
+
+        .option-card.selected {
+            background-color: #ff477e;
+            color: white;
+            border-color: #ff477e;
+        }
+
+        ul {
+            text-align: left;
+            margin: 20px 0;
+            color: #555;
+            list-style: none;
+            width: 100%;
+            padding-left: 10px;
+        }
+
+        ul li {
+            margin: 10px 0;
+            font-size: 16px;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="card">
+        <div class="page active" id="page1">
+            <div class="gif-placeholder">💖</div>
+            <h2>Will you go on a date with me?</h2>
+            <div class="btn-container" id="ask-container">
+                <button class="btn-yes" onclick="nextPage(2)">❤️ Yes</button>
+                <button class="btn-no" id="no-btn" onmouseover="moveNoButton()" onclick="moveNoButton()">😅 No</button>
+            </div>
+        </div>
+
+        <div class="page" id="page2">
+            <div class="gif-placeholder">📅</div>
+            <h2>Choose a date</h2>
+            <input type="date" id="date-input">
+            <br>
+            <button class="btn-next" onclick="nextPage(3)">Next ➔</button>
+        </div>
+
+        <div class="page" id="page3">
+            <div class="gif-placeholder">🕒</div>
+            <h2>Choose a time</h2>
+            <input type="time" id="time-input">
+            <br>
+            <button class="btn-next" onclick="nextPage(4)">Next ➔</button>
+        </div>
+
+        <div class="page" id="page4">
+            <div class="gif-placeholder">📍</div>
+            <h2>Choose a place</h2>
+            <div class="options-grid">
+                <div class="option-card" onclick="selectOption(this, 'place', 'The Movies 🎬')">The Movies 🎬</div>
+                <div class="option-card" onclick="selectOption(this, 'place', 'A Cozy Cafe ☕')">A Cozy Cafe ☕</div>
+                <div class="option-card" onclick="selectOption(this, 'place', 'The Park 🌳')">The Park 🌳</div>
+                <div class="option-card" onclick="selectOption(this, 'place', 'An Arcade 🕹️')">An Arcade 🕹️</div>
+            </div>
+            <button class="btn-next" onclick="nextPage(5)">Next ➔</button>
+        </div>
+
+        <div class="page" id="page5">
+            <div class="gif-placeholder">🍕</div>
+            <h2>Choose what to eat</h2>
+            <div class="options-grid">
+                <div class="option-card" onclick="selectOption(this, 'food', 'Pizza/Italian 🍕')">Pizza 🍕</div>
+                <div class="option-card" onclick="selectOption(this, 'food', 'Burgers & Fries 🍔')">Burgers 🍔</div>
+                <div class="option-card" onclick="selectOption(this, 'food', 'Sushi 🍣')">Sushi 🍣</div>
+                <div class="option-card" onclick="selectOption(this, 'food', 'Sweet Desserts 🍰')">Desserts 🍰</div>
+            </div>
+            <button class="btn-next" onclick="compileSummary()">Finish ✨</button>
+        </div>
+
+        <div class="page" id="page6">
+            <div class="gif-placeholder">🎉</div>
+            <h2>Yay! It's a date ❤️</h2>
+            <h3 style="color: #ff477e; margin: 10px 0;" id="final-see-you">See you on...</h3>
+            
+            <ul>
+                <li>📍 <strong>Place:</strong> <span id="summary-place"></span></li>
+                <li>🍕 <strong>Food:</strong> <span id="summary-food"></span></li>
+            </ul>
+        </div>
+    </div>
+
+    <script>
+        let selections = {
+            date: '',
+            time: '',
+            place: '',
+            food: ''
+        };
+
+        function nextPage(pageNumber) {
+            // Save inputs dynamically as they move forward
+            if (pageNumber === 3) {
+                selections.date = document.getElementById('date-input').value || "a special day";
+            }
+            if (pageNumber === 4) {
+                selections.time = document.getElementById('time-input').value || "a perfect time";
+            }
+
+            // Hide all pages
+            document.querySelectorAll('.page').forEach(page => {
+                page.classList.remove('active');
+            });
+            // Show current page
+            document.getElementById('page' + pageNumber).classList.add('active');
+        }
+
+        function selectOption(element, category, value) {
+            const siblings = element.parentElement.querySelectorAll('.option-card');
+            siblings.forEach(el => el.classList.remove('selected'));
+            
+            element.classList.add('selected');
+            selections[category] = value;
+        }
+
+        function compileSummary() {
+            // Fallback text if they skipped picking options
+            if(!selections.place) selections.place = "A surprise location 🗺️";
+            if(!selections.food) selections.food = "Whatever you crave! 😋";
+
+            // Format the final "See you on..." line dynamically with chosen Date and Time
+            document.getElementById('final-see-you').innerText = `See you on ${selections.date} at ${selections.time}!`;
+            
+            // Set the rest of the summary
+            document.getElementById('summary-place').innerText = selections.place;
+            document.getElementById('summary-food').innerText = selections.food;
+
+            nextPage(6);
+        }
+
+        // The running away "No" button logic
+        function moveNoButton() {
+            const noBtn = document.getElementById('no-btn');
+            const container = document.getElementById('ask-container');
+            
+            const maxX = container.clientWidth - noBtn.clientWidth;
+            const maxY = 150; 
+            
+            const randomX = Math.floor(Math.random() * maxX);
+            const randomY = Math.floor(Math.random() * maxY) - 50; 
+
+            noBtn.style.left = randomX + 'px';
+            noBtn.style.top = randomY + 'px';
+        }
+    </script>
+</body>
+</html>
